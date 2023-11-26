@@ -6,12 +6,12 @@ func routes(_ app: Application) throws {
         try await req.view.render("index", ["title": "Hello Vapor!"])
     }
     // render the admin panel
-    app.get("admin") { req -> EventLoopFuture<View> in
+    app.get("admin", "create") { req -> EventLoopFuture<View> in
         return req.view.render("adminPanel", ["title": "Admin Panel"])
     }
 
-
-    app.post("admin", use:createMessageHandler) 
+    // endpoint to post new messages from the admin panel
+    app.post("admin", "create", use:createMessageHandler)
 
 
     // get selections json file from database

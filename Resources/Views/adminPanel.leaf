@@ -6,7 +6,7 @@
     <body>
         <h1>#(title)</h1>
         <h2>Enter Message:</h2>
-    <form action="/admin" method="POST">
+    <form action="/admin/create" method="POST">
         <label for="user">User NetID:</label>
         <input type="text" id="userID" name="userID" required>
         <br>
