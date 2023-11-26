@@ -5,6 +5,18 @@
     </head>
     <body>
         <h1>#(title)</h1>
-        <p>This is the admin panel</p>
+        <h2>Enter Message:</h2>
+    <form action="/admin" method="POST">
+        <label for="user">User NetID:</label>
+        <input type="text" id="userID" name="userID" required>
+        <br>
+
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message" required>
+        <br>
+
+        <input type="submit" value="Submit">
+    </form>
+
     </body>
 </html>

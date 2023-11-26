@@ -10,7 +10,10 @@ func routes(_ app: Application) throws {
         return req.view.render("adminPanel", ["title": "Admin Panel"])
     }
 
-    
+
+    app.post("admin", use:createMessageHandler) 
+
+
     // get selections json file from database
     app.get("selections") { req async throws in
         try await Selections.query(on: req.db).all()
@@ -23,11 +26,11 @@ func routes(_ app: Application) throws {
     // get messages sent to this user
     app.get("messages", ":id") { req -> [Message] in
         // Extract Id from URL
-        if let id = req.parameters.get("id", as: UUID.self) {
+        if let id = req.parameters.get("id", as: String.self) {
 //            let responseBody = "Received ID: \(id)"
     
             let messages = try await Message.query(on: req.db)
-                .filter(\.$receiver.$id == id)
+                .filter(\.$receiverID == id)
                 .sort(\.$timestamp)
                 .all()
             return messages

@@ -14,14 +14,14 @@ final class Message: Model, Content {
     var timestamp: Date?
 
     
-    @Parent(key: "receiverID")
-    var receiver: User
+    @Field(key: "receiverID")
+    var receiverID: String
     
     init() {}
     
-    init(id: UUID? = nil, content: String, receiverID: User.IDValue) {
+    init(id: UUID? = nil, content: String, receiverID: String) {
         self.id = id
         self.content = content
-        self.$receiver.id = receiverID
+        self.receiverID = receiverID
     }
 }
