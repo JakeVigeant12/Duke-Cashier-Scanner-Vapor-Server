@@ -6,11 +6,15 @@ func routes(_ app: Application) throws {
         try await req.view.render("index", ["title": "Hello Vapor!"])
     }
 
-    app.get("hello") { req async -> String in
-        "Hello, world!"
-    }
+//    app.get("hello") { req async -> String in
+//        "Hello, world!"
+//    }
     
-    app.get("test") {  req -> EventLoopFuture<SelectionsResponse> in
+    app.get("selections") { req async throws in
+        try await Selections.query(on: req.db).all()
+    }
+
+    app.get("selection_options") {  req -> EventLoopFuture<SelectionsResponse> in
         let jsonResponse = SelectionsResponse(
                     departments: ["Dining", "School Of Nursing", "Duke Stores", "Duke Card", "Parking", "Other"],
                     locations: [
@@ -45,5 +49,4 @@ func routes(_ app: Application) throws {
 
     }
 
-    try app.register(collection: TodoController())
 }
