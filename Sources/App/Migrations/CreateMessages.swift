@@ -6,7 +6,7 @@ struct CreateMessages: Migration {
         return database.schema("messages")
             .id()
             .field("content", .string, .required)
-            .field("senderID", .uuid, .references("users", "id"))
+            .field("timestamp", .datetime)  
             .field("receiverID", .uuid, .references("users", "id"))
             .create()
     }

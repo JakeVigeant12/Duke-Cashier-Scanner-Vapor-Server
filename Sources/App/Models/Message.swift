@@ -10,18 +10,18 @@ final class Message: Model, Content {
     @Field(key: "content")
     var content: String
     
-    @Parent(key: "senderID")
-    var sender: User
+    @Timestamp(key: "timestamp", on: .create)
+    var timestamp: Date?
+
     
     @Parent(key: "receiverID")
     var receiver: User
     
     init() {}
     
-    init(id: UUID? = nil, content: String, senderID: User.IDValue, receiverID: User.IDValue) {
+    init(id: UUID? = nil, content: String, receiverID: User.IDValue) {
         self.id = id
         self.content = content
-        self.$sender.id = senderID
         self.$receiver.id = receiverID
     }
 }

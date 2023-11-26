@@ -5,15 +5,41 @@ func routes(_ app: Application) throws {
     app.get { req async throws in
         try await req.view.render("index", ["title": "Hello Vapor!"])
     }
+    // render the admin panel
+    app.get("admin") { req -> EventLoopFuture<View> in
+        return req.view.render("adminPanel", ["title": "Admin Panel"])
+    }
 
-//    app.get("hello") { req async -> String in
-//        "Hello, world!"
-//    }
     
+    // get selections json file from database
     app.get("selections") { req async throws in
         try await Selections.query(on: req.db).all()
     }
 
+    
+    // add new message
+    app.post("messages", "create", use: createMessageHandler)
+    
+    // get messages sent to this user
+    app.get("messages", ":id") { req -> [Message] in
+        // Extract Id from URL
+        if let id = req.parameters.get("id", as: UUID.self) {
+//            let responseBody = "Received ID: \(id)"
+    
+            let messages = try await Message.query(on: req.db)
+                .filter(\.$receiver.$id == id)
+                .sort(\.$timestamp)
+                .all()
+            return messages
+            
+        } else {
+            // Handle the case where 'id' is not a valid integer
+            throw Abort(.badRequest, reason: "Invalid 'id' parameter")
+        }
+    }
+    
+    // return static list of the selection options
+    
     app.get("selection_options") {  req -> EventLoopFuture<SelectionsResponse> in
         let jsonResponse = SelectionsResponse(
                     departments: ["Dining", "School Of Nursing", "Duke Stores", "Duke Card", "Parking", "Other"],
@@ -49,18 +75,6 @@ func routes(_ app: Application) throws {
 
     }
     
-    app.get("messages", ":id") { req -> String in
-        // Access the captured 'id' parameter from the URL
-        if let id = req.parameters.get("id", as: Int.self) {
-            // Use the 'id' parameter as needed
-            let responseBody = "Received ID: \(id)"
-            
-            return responseBody
-        } else {
-            // Handle the case where 'id' is not a valid integer
-            throw Abort(.badRequest, reason: "Invalid 'id' parameter")
-        }
-    }
 
 
 }
