@@ -20,6 +20,8 @@ public func configure(_ app: Application) async throws {
 
     app.migrations.add(CreateSelections())
     app.migrations.add(SelectionsSeed())
+    app.migrations.add(CreateUsers())
+    app.migrations.add(CreateMessages())
 
     app.views.use(.leaf)
 

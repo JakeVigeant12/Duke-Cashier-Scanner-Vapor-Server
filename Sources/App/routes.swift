@@ -48,5 +48,19 @@ func routes(_ app: Application) throws {
                 return req.eventLoop.makeSucceededFuture(jsonResponse)
 
     }
+    
+    app.get("messages", ":id") { req -> String in
+        // Access the captured 'id' parameter from the URL
+        if let id = req.parameters.get("id", as: Int.self) {
+            // Use the 'id' parameter as needed
+            let responseBody = "Received ID: \(id)"
+            
+            return responseBody
+        } else {
+            // Handle the case where 'id' is not a valid integer
+            throw Abort(.badRequest, reason: "Invalid 'id' parameter")
+        }
+    }
+
 
 }
