@@ -2,12 +2,15 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req async throws in
-        try await req.view.render("index", ["title": "Hello Vapor!"])
+
+    // base route is the admin panel main menu
+    app.get
+    { req -> EventLoopFuture<View> in
+        return req.view.render("adminPanel")
     }
     // render the admin panel
     app.get("admin", "create") { req -> EventLoopFuture<View> in
-        return req.view.render("adminPanel", ["title": "Admin Panel"])
+        return req.view.render("sendMessage", ["title": "Send Cashier Feedback"])
     }
 
     // endpoint to post new messages from the admin panel
