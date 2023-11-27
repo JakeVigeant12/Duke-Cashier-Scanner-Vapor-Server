@@ -30,7 +30,7 @@ func routes(_ app: Application) throws {
     
             let messages = try await Message.query(on: req.db)
                 .filter(\.$receiverID == id)
-                .sort(\.$timestamp)
+                .sort(\.$timestamp, .descending)
                 .all()
             return messages
             
@@ -39,6 +39,21 @@ func routes(_ app: Application) throws {
             throw Abort(.badRequest, reason: "Invalid 'id' parameter")
         }
     }
+    
+    // delete a message by id
+    app.delete("messages", ":id") { req -> String in
+        // get the message id from path
+        if let id = req.parameters.get("id", as: String.self) {
+            // delete the message
+            let uId = UUID(id)
+            try await Message.query(on: req.db)
+                .filter(\.$id == uId!)
+                .delete()
+                return "Delete successful"
+            }
+        return "Delete failed"
+        }
+    
     
     // return static list of the selection options
     
