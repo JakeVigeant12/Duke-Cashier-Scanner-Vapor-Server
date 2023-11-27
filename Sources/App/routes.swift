@@ -19,10 +19,6 @@ func routes(_ app: Application) throws {
         try await Selections.query(on: req.db).all()
     }
 
-    
-    // add new message
-    app.post("messages", "create", use: createMessageHandler)
-    
     // get messages sent to this user
     app.get("messages", ":id") { req -> [Message] in
         // Extract Id from URL
