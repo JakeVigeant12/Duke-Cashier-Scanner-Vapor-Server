@@ -1,8 +1,9 @@
+// Created by Jake Vigeant
 import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-
+    // MARK: Routes for server
     // base route is the admin panel main menu
     app.get
     { req -> EventLoopFuture<View> in
@@ -26,8 +27,6 @@ func routes(_ app: Application) throws {
     app.get("messages", ":id") { req -> [Message] in
         // Extract Id from URL
         if let id = req.parameters.get("id", as: String.self) {
-//            let responseBody = "Received ID: \(id)"
-    
             let messages = try await Message.query(on: req.db)
                 .filter(\.$receiverID == id)
                 .sort(\.$timestamp, .descending)
@@ -55,8 +54,7 @@ func routes(_ app: Application) throws {
         }
     
     
-    // return static list of the selection options
-    
+//    // return static list of the selection options - used for testing
     app.get("selection_options") {  req -> EventLoopFuture<SelectionsResponse> in
         let jsonResponse = SelectionsResponse(
                     departments: ["Dining", "School Of Nursing", "Duke Stores", "Duke Card", "Parking", "Other"],
@@ -92,6 +90,4 @@ func routes(_ app: Application) throws {
 
     }
     
-
-
 }

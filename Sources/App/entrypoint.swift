@@ -1,3 +1,5 @@
+// Created by Jake Vigeant
+
 import Vapor
 import Dispatch
 import Logging

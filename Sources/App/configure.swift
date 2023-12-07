@@ -1,15 +1,23 @@
+// Created by Jake Vigeant
 import NIOSSL
 import Fluent
 import FluentPostgresDriver
 import Leaf
 import Vapor
+import Logging
+
 
 // configures your application
 public func configure(_ app: Application) async throws {
-    // uncomment to serve files from /Public folder
+    // logging for deployment info
+    let logger = Logger(label: "edeposit-backend")
+
      app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
+    //MARK: Establish database connection, with local fallback if heroku environment variables cannot be found
     if let databaseURL = Environment.get("DATABASE_URL") {
+        print("Found Postgres")
+        logger.info("Found Postgres")
         var tlsConfig: TLSConfiguration = .makeClientConfiguration()
         tlsConfig.certificateVerification = .none
         let nioSSLContext = try NIOSSLContext(configuration: tlsConfig)
@@ -20,7 +28,9 @@ public func configure(_ app: Application) async throws {
         app.databases.use(.postgres(configuration: postgresConfig), as: .psql)
     }
     else{
-        
+            print("Rempote connection failed")
+            logger.info("Rempote connection failed")
+
             app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
                 hostname: Environment.get("DATABASE_HOST") ?? "localhost",
                 port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,

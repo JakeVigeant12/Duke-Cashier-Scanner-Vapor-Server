@@ -1,3 +1,5 @@
+// Created by Jake Vigeant
+
 import Vapor
 
 struct SelectionsResponse: Content {

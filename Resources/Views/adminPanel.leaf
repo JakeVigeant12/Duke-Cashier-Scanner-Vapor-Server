@@ -71,7 +71,6 @@
     <div class="container">
         <h2>AFO Deposit Bag Admin Panel</h2>
         <a href="/admin/create"><button>Send Messages to Cashiers</button></a>
-        <a href=""><button>Alter Dept./Location/POSName Options</button></a>
     </div>
 </body>
 </html>
